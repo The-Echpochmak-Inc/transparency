@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Echpochmak Inc. Status Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="bg-gray-900 text-white font-sans">
+    <div class="container mx-auto px-4 py-10">
+        <h1 class="text-3xl font-bold text-center mb-6">Echpochmak Inc. Corporate Status Dashboard</h1>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
+            <div class="bg-gray-800 p-4 rounded-lg">
+                <h2 class="text-lg font-semibold">Market Disruption Index</h2>
+                <p id="marketIndex" class="text-2xl font-bold mt-2">Loading...</p>
+            </div>
+            <div class="bg-gray-800 p-4 rounded-lg">
+                <h2 class="text-lg font-semibold">Total Funding Secured</h2>
+                <p id="funding" class="text-2xl font-bold mt-2">Loading...</p>
+            </div>
+            <div class="bg-gray-800 p-4 rounded-lg">
+                <h2 class="text-lg font-semibold">Strategic Synergy Quotient</h2>
+                <p id="synergy" class="text-2xl font-bold mt-2">Loading...</p>
+            </div>
+        </div>
+
+        <div class="mt-8">
+            <h2 class="text-xl font-semibold text-center">Real-Time AI-Generated Market Trends</h2>
+            <canvas id="marketChart" class="mt-4"></canvas>
+        </div>
+    </div>
+
+    <script>
+        function getRandomPercentage() {
+            return (Math.random() * 50 + 50).toFixed(2) + "%";
+        }
+
+        function getRandomFunding() {
+            return "$" + (Math.random() * 900 + 100).toFixed(2) + "M";
+        }
+
+        function getRandomSynergy() {
+            return (Math.random() * 10).toFixed(2);
+        }
+
+        function updateStats() {
+            document.getElementById("marketIndex").innerText = getRandomPercentage();
+            document.getElementById("funding").innerText = getRandomFunding();
+            document.getElementById("synergy").innerText = getRandomSynergy();
+        }
+
+        setInterval(updateStats, 10000);
+        updateStats();
+
+        // Chart.js setup
+        const ctx = document.getElementById("marketChart").getContext("2d");
+        const marketChart = new Chart(ctx, {
+            type: "line",
+            data: {
+                labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
+                datasets: [{
+                    label: "Market Disruption Index",
+                    data: Array.from({length: 6}, () => Math.floor(Math.random() * 100)),
+                    borderColor: "rgb(75, 192, 192)",
+                    tension: 0.3,
+                    fill: false
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { display: false }
+                }
+            }
+        });
+
+        function updateChart() {
+            marketChart.data.datasets[0].data.push(Math.floor(Math.random() * 100));
+            marketChart.data.labels.push(new Date().toLocaleTimeString());
+            if (marketChart.data.labels.length > 10) {
+                marketChart.data.labels.shift();
+                marketChart.data.datasets[0].data.shift();
+            }
+            marketChart.update();
+        }
+
+        setInterval(updateChart, 10000);
+    </script>
+</body>
+</html>
